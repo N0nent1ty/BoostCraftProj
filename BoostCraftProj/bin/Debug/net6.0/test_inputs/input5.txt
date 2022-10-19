@@ -1,0 +1,1 @@
+<This arrt="i am attr"><is><apple> this is xml node with attr </apple></is></This>

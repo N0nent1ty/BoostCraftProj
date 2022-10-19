@@ -1,0 +1,17 @@
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\BoostCraftProj.exe
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\BoostCraftProj.deps.json
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\BoostCraftProj.runtimeconfig.json
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\BoostCraftProj.dll
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\BoostCraftProj.pdb
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\bin\Debug\net6.0\Antlr4.Runtime.Standard.dll
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.csproj.AssemblyReference.cache
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.GeneratedMSBuildEditorConfig.editorconfig
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.AssemblyInfoInputs.cache
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.AssemblyInfo.cs
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.csproj.CoreCompileInputs.cache
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.csproj.CopyComplete
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.dll
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\refint\BoostCraftProj.dll
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.pdb
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\BoostCraftProj.genruntimeconfig.cache
+E:\experiments\vs_projects\BoostCraftProj\BoostCraftProj\obj\Debug\net6.0\ref\BoostCraftProj.dll
