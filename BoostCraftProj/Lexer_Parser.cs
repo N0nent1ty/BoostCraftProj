@@ -403,15 +403,10 @@
                 element_node.strList_Identifiers.Add(strFirstIdentifier);
 
                 char ch = this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1);
-                /*
-                if (Char.IsWhiteSpace(ch)) {
-                    this.lexer.Ignore_attribute();
-                }
-                */
+
                 this.lexer.Match_CLOSE_TOKEN();
                 this.lexer.Ignore_space();
                 this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
-                //char ch = this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1);
                 ch = this.lexer.Peek_One_Char();
                 int nRecord = 0;
                 //peek on char after <person attr="123"> `here`
@@ -436,7 +431,6 @@
                 else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) != '/'))
                 {
                     //<without slash >
-                    //Console.WriteLine("Current Position is {0}, ch is {1}", this.lexer.Get_Current_Char_Position(), ch);
                     nRecord = this.lexer.Get_Current_Char_Position();
                     element_node.childNode = Element();
                     this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
@@ -448,15 +442,13 @@
                     throw new ApplicationException(strErrorMessage);
 
                 }
-                //if (!this.lexer.Match_OPEN_TOKEN()) { return null; }
                 this.lexer.Match_OPEN_TOKEN();
                 this.lexer.Match_SLASH_TOKEN();
                 CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
                 string strSecondIdentifier = second_Identifier.getText();
                 element_node.strList_Identifiers.Add(strSecondIdentifier);
                 this.lexer.Match_CLOSE_TOKEN();
-                //this.lexer.strInputString=this.lexer.strInputString.Remove(nRecord, (this.lexer.Get_Current_Char_Position()-nRecord));
-                //Console.WriteLine("After delete {0}", this.lexer.strInputString);
+
 
             }
             catch (Exception ex) {
