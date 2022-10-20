@@ -20,8 +20,8 @@ class CheckFileFormat
         Lexer_and_parser.Parser parser = new Lexer_and_parser.Parser(Input_string1);
         parser.Element();
 
-        List<cTOKEN_NODE> tokens = parser.get_tokens();
-        foreach (cTOKEN_NODE token in tokens) {
+        List<CBaseTokenNode> tokens = parser.get_tokens();
+        foreach (CBaseTokenNode token in tokens) {
             Console.WriteLine(token.getText());
         }        
         return false;
