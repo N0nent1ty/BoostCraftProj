@@ -180,7 +180,8 @@
                 else if (Char.IsWhiteSpace(ch)) {
                     //try_parse_optional_attr();
                     Ignore_space();
-                    Console.WriteLine("Try parse attr");
+                    Ignore_attribute();
+                    //Console.WriteLine("Try parse attr");
                 
                 }
                 else
@@ -340,6 +341,33 @@
         }
 
 
+        public void Ignore_attribute() {
+            Ignore_space();
+            while (true)
+            {
+                char ch = Peek_One_Char();
+                if (ch.Equals('>')) { return; }
+
+                // legitimate input =, ", alphabet, numberm and white space
+                else if (ch.Equals('\"') || ch.Equals('=') || Char.IsLetterOrDigit(ch) || Char.IsWhiteSpace(ch))
+                {
+                    this.nCurrentCharPosition++;
+                }
+                else
+                {
+                    string strErrorMessage = String.Format("Invalid charater detected while parsing attribute, invalid symbol {0}, not a valid XML node", ch);
+                    throw new ApplicationException(strErrorMessage);
+                }
+
+
+                if (nCurrentCharPosition == this.nInputLength) {
+                    string strErrorMessage = String.Format("Reach EOF while parsing attribute, not a valid XML node");
+                    throw new ApplicationException(strErrorMessage);
+
+                }
+            }
+        }
+
     }//end class lexer
 
 
@@ -373,11 +401,18 @@
                 CBaseTokenNode firstIdentifier =this.lexer.Match_IDENTIFY_TOKEN();
                 string strFirstIdentifier = firstIdentifier.getText();
                 element_node.strList_Identifiers.Add(strFirstIdentifier);
+
+                char ch = this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1);
+                /*
+                if (Char.IsWhiteSpace(ch)) {
+                    this.lexer.Ignore_attribute();
+                }
+                */
                 this.lexer.Match_CLOSE_TOKEN();
                 this.lexer.Ignore_space();
                 this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
                 //char ch = this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1);
-                char ch = this.lexer.Peek_One_Char();
+                ch = this.lexer.Peek_One_Char();
                 int nRecord = 0;
                 //peek on char after <person attr="123"> `here`
                 if (Char.IsLetterOrDigit(ch))
@@ -401,7 +436,7 @@
                 else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) != '/'))
                 {
                     //<without slash >
-                    Console.WriteLine("Current Position is {0}, ch is {1}", this.lexer.Get_Current_Char_Position(), ch);
+                    //Console.WriteLine("Current Position is {0}, ch is {1}", this.lexer.Get_Current_Char_Position(), ch);
                     nRecord = this.lexer.Get_Current_Char_Position();
                     element_node.childNode = Element();
                     this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);

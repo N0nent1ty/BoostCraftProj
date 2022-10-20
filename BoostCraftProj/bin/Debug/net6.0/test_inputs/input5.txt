@@ -1,0 +1,1 @@
+<random><good>invalid input</notgood></notrandom>

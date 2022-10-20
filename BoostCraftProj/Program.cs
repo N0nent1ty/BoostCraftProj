@@ -7,15 +7,33 @@ class CheckFileFormat
 {
 
 
-    static void PrintNode(CElementNode node) {
+
+    static bool CheckedTheSymmetry(List<string> pair_string)
+    {
+
+        bool isAllEqual = pair_string.Distinct().Count() == 1;
+        return isAllEqual;
+    }
+
+    static bool bCheckValidFlag=true;
+
+
+
+    static void PrintAndCheckNode(CElementNode node, ref bool bFlag) {
+
+
         foreach (string identifier in node.strList_Identifiers)
         {
+            //One false in node, return as invalid, ex <test1><test2><test3> </lol></test2></test3>, one error return as invalid
+            if (CheckedTheSymmetry(node.strList_Identifiers)==false) { 
+                bFlag=false;
+            }
             Console.WriteLine(identifier);
         }
         if (node.childNode != null) {
-            PrintNode(node.childNode);
+            PrintAndCheckNode(node.childNode, ref bFlag);
         }
-
+        return;
     }
 
 
@@ -32,16 +50,28 @@ class CheckFileFormat
         System.Console.WriteLine("Contents of text file = {0}", Input_string1);
             
         Lexer_and_parser.Parser parser = new Lexer_and_parser.Parser(Input_string1);
+        bool bFlag = true;
         CElementNode node= parser.Element();
-        PrintNode(node);
+        if (node.strList_Identifiers.Count < 2) {
+            bFlag = false;
+        }
+        PrintAndCheckNode(node, ref bFlag);
+        if (bFlag == true) {
+            Console.WriteLine("It is a valid XML node input");
+        }
+        else
+        {
+            Console.WriteLine("It is not a valid XML node input");
+        }
 
 
-
-
+        //print tokens for debugging
+        /* 
         List<CBaseTokenNode> tokens = parser.get_tokens();
         foreach (CBaseTokenNode token in tokens) {
             Console.WriteLine(token.getText());
-        }        
+        }
+        */
         return false;
     }
 
