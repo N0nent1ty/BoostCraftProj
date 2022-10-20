@@ -33,7 +33,7 @@ class CheckFileFormat
             
         Lexer_and_parser.Parser parser = new Lexer_and_parser.Parser(Input_string1);
         CElementNode node= parser.Element();
-       // PrintNode(node);
+        PrintNode(node);
 
 
 

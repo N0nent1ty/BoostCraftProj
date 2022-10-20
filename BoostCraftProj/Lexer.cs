@@ -404,20 +404,8 @@
                     Console.WriteLine("Current Position is {0}, ch is {1}", this.lexer.Get_Current_Char_Position(), ch);
                     nRecord = this.lexer.Get_Current_Char_Position();
                     element_node.childNode = Element();
-                }
-                else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) == '/'))
-                {
-
-                    //if (!this.lexer.Match_OPEN_TOKEN()) { return null; }
-                    this.lexer.Match_OPEN_TOKEN();
-                    this.lexer.Match_SLASH_TOKEN();
-                    CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
-                    string strSecondIdentifier = second_Identifier.getText();
-                    element_node.strList_Identifiers.Add(strSecondIdentifier);
-                    this.lexer.Match_CLOSE_TOKEN();
-                    this.lexer.strInputString.Remove(nRecord, this.lexer.Get_Current_Char_Position());
-                    Console.WriteLine("After delete {0}", this.lexer.strInputString);
-                }
+                    this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
+                }               
                 else
                 {
 
@@ -425,6 +413,16 @@
                     throw new ApplicationException(strErrorMessage);
 
                 }
+                //if (!this.lexer.Match_OPEN_TOKEN()) { return null; }
+                this.lexer.Match_OPEN_TOKEN();
+                this.lexer.Match_SLASH_TOKEN();
+                CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
+                string strSecondIdentifier = second_Identifier.getText();
+                element_node.strList_Identifiers.Add(strSecondIdentifier);
+                this.lexer.Match_CLOSE_TOKEN();
+                //this.lexer.strInputString=this.lexer.strInputString.Remove(nRecord, (this.lexer.Get_Current_Char_Position()-nRecord));
+                //Console.WriteLine("After delete {0}", this.lexer.strInputString);
+
             }
             catch (Exception ex) {
                 if (ex.GetType().FullName == "TryParseFailException")
