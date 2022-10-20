@@ -6,6 +6,20 @@ using Lexer_and_parser;
 class CheckFileFormat
 {
 
+
+    static void PrintNode(CElementNode node) {
+        foreach (string identifier in node.strList_Identifiers)
+        {
+            Console.WriteLine(identifier);
+        }
+        if (node.childNode != null) {
+            PrintNode(node.childNode);
+        }
+
+    }
+
+
+
     static bool checkFileFormat(FileInfo file)
     {
         //If the input not even in XML node format, it simply raise a exeception 
@@ -18,7 +32,11 @@ class CheckFileFormat
         System.Console.WriteLine("Contents of text file = {0}", Input_string1);
             
         Lexer_and_parser.Parser parser = new Lexer_and_parser.Parser(Input_string1);
-        parser.Element();
+        CElementNode node= parser.Element();
+       // PrintNode(node);
+
+
+
 
         List<CBaseTokenNode> tokens = parser.get_tokens();
         foreach (CBaseTokenNode token in tokens) {

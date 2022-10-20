@@ -12,7 +12,7 @@
         OPEN,
         CLOSE,
         CHAR_DATA,
-        OPEN_WITH_SLASH,
+        SLASH,
         IDENTIFIER,
         ELEMENT
     }
@@ -39,9 +39,9 @@
 
     class CElementNode : CBaseTokenNode  {
 
-        private List<string> strIdentifiers = new List<string>();
-        private List<string> strProperties =new List<string>();
-        private CElementNode childNode;
+        public List<string> strList_Identifiers = new List<string>();
+        public List<string> strList_Properties =new List<string>();
+        public CElementNode childNode;
 
         public CElementNode(TOKEN_TYPES n) : base(n) { 
             
@@ -60,7 +60,7 @@
     //================================================================
 
     class Lexer {
-        private string strInputString;
+        public string strInputString;
         private int nCurrentCharPosition;
         private int nInputLength;
         private List<CBaseTokenNode> tokens;
@@ -97,7 +97,7 @@
 
 
 
-        public void Match_OPEN_TOKEN() {
+        public bool Match_OPEN_TOKEN() {
             Ignore_space();
             char ch = Peek_One_Char();
             char chOpen = '<';
@@ -109,12 +109,14 @@
                 nCurrentCharPosition += 1;
                 CBaseTokenNode node = new CBaseTokenNode(TOKEN_TYPES.OPEN, "<");
                 this.tokens.Add(node);
-                return;
+                return true;
             }
             else {
                 //handle not match error
                 string strErrorMessage = String.Format("Expect the  OPEN token but a {0}, not a valid XML node", ch);
-                throw new ApplicationException(strErrorMessage);
+                //throw new ApplicationException(strErrorMessage);
+                Console.WriteLine(strErrorMessage);
+                return false;
             }
         }
 
@@ -123,6 +125,12 @@
             // space or alphabet or digits
             while(true)
             {
+                if (this.nCurrentCharPosition == this.nInputLength)
+                {
+                    throw new ApplicationException("Expect a token but reach EOF, not a valid XML node");
+                }
+
+
                 ch = Peek_One_Char();
                 if (Char.IsWhiteSpace(ch))
                 {
@@ -131,10 +139,7 @@
                 else {
                     break;
                 }
-                if (this.nCurrentCharPosition == this.nInputLength)
-                {
-                    throw new ApplicationException("Expect a token but reach EOF, not a valid XML node");
-                }
+
             };
 
         }
@@ -146,7 +151,6 @@
             int nTokenBeginPosition = nCurrentCharPosition;
             int nTokenLengthCount = 0;
             //at least on identifier
-            bool bHasIdentifier = false;
             while (true) {
                 ch = Peek_One_Char();
                 if (Char.IsLetterOrDigit(ch))
@@ -154,6 +158,10 @@
                     bHasIdentifier = true;
                     nTokenLengthCount++;
                     nCurrentCharPosition++;
+                    if (nCurrentCharPosition == this.nInputLength) {
+                        string strErrorMessage = String.Format("Expect the  IDENTIFIER token but reach to EOF token \'>\' , not a valid XML node");
+                        throw new ApplicationException(strErrorMessage);
+                    }
                 }
                 else if (ch.Equals('>'))
                 {
@@ -245,6 +253,7 @@
 
 
         public CBaseTokenNode Try_Match_CHARDATA_Token() {
+            Ignore_space();
             int nRollbackPosition = this.nCurrentCharPosition;
             int nCharDataLengthCount = 0;
             int nCharDataBeginPosition = this.nCurrentCharPosition;
@@ -302,7 +311,37 @@
             }
         }
 
+
+
+
+        public bool Match_SLASH_TOKEN()
+        {
+            Ignore_space();
+            char ch = Peek_One_Char();
+            char chOpen = '/';
+            //Console.WriteLine("ch is " + ch);
+            //Console.WriteLine(chOpen.Equals(ch));
+            if (chOpen.Equals(ch))
+            {
+
+                nCurrentCharPosition += 1;
+                CBaseTokenNode node = new CBaseTokenNode(TOKEN_TYPES.SLASH, "/");
+                this.tokens.Add(node);
+                return true;
+            }
+            else
+            {
+                //handle not match error
+                string strErrorMessage = String.Format("Expect the  SLASH token but a {0}, not a valid XML node", ch);
+                //throw new ApplicationException(strErrorMessage);
+                Console.WriteLine(strErrorMessage);
+                return false;
+            }
+        }
+
+
     }//end class lexer
+
 
 
 
@@ -315,30 +354,31 @@
     //================================================================
     class Parser
     {
-
+        private bool bAlreadyParseCharData = false;
         private Lexer lexer;
         public Parser(string strInput)
         {
             this.lexer = new Lexer(strInput);
         }
 
-        public void Element()
+        public CElementNode Element()
         {
 
-            bool bAlreadyParseCharData=false;
+            CElementNode element_node = new CElementNode(TOKEN_TYPES.ELEMENT);
             try
             {
-                CElementNode element_node = new CElementNode(TOKEN_TYPES.ELEMENT);
 
-
+                //if (!this.lexer.Match_OPEN_TOKEN()) { return null; }
                 this.lexer.Match_OPEN_TOKEN();
                 CBaseTokenNode firstIdentifier =this.lexer.Match_IDENTIFY_TOKEN();
                 string strFirstIdentifier = firstIdentifier.getText();
+                element_node.strList_Identifiers.Add(strFirstIdentifier);
                 this.lexer.Match_CLOSE_TOKEN();
                 this.lexer.Ignore_space();
                 this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
+                //char ch = this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1);
                 char ch = this.lexer.Peek_One_Char();
-
+                int nRecord = 0;
                 //peek on char after <person attr="123"> `here`
                 if (Char.IsLetterOrDigit(ch))
                 {
@@ -357,15 +397,34 @@
                         string strErrorMessage = String.Format("Expect the </IDENTIFIER> or <IDENTIFIER> token but get a {0}, not a valid XML node", ch);
                         throw new ApplicationException(strErrorMessage);
                     }
-                    return;
                 }
-                else if (ch.Equals('<')) { 
-                    
-                
-                
-                
+                else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) != '/'))
+                {
+                    //<without slash >
+                    Console.WriteLine("Current Position is {0}, ch is {1}", this.lexer.Get_Current_Char_Position(), ch);
+                    nRecord = this.lexer.Get_Current_Char_Position();
+                    element_node.childNode = Element();
                 }
+                else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) == '/'))
+                {
 
+                    //if (!this.lexer.Match_OPEN_TOKEN()) { return null; }
+                    this.lexer.Match_OPEN_TOKEN();
+                    this.lexer.Match_SLASH_TOKEN();
+                    CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
+                    string strSecondIdentifier = second_Identifier.getText();
+                    element_node.strList_Identifiers.Add(strSecondIdentifier);
+                    this.lexer.Match_CLOSE_TOKEN();
+                    this.lexer.strInputString.Remove(nRecord, this.lexer.Get_Current_Char_Position());
+                    Console.WriteLine("After delete {0}", this.lexer.strInputString);
+                }
+                else
+                {
+
+                    string strErrorMessage = String.Format("Unexpected character detected {0}, not a valid XML node", ch);
+                    throw new ApplicationException(strErrorMessage);
+
+                }
             }
             catch (Exception ex) {
                 if (ex.GetType().FullName == "TryParseFailException")
@@ -379,6 +438,7 @@
                     Console.WriteLine(ex);
                 }
             }
+            return element_node;
         }
         public List<CBaseTokenNode> get_tokens() { return this.lexer.get_tokens(); }
     }
