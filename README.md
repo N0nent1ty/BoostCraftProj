@@ -12,9 +12,6 @@
 ![alt text](https://github.com/N0nent1ty/BoostCraftProj/blob/master/demo_imgs/how_to_execute2.PNG)
 
 ## Feature
-
-- Note that, the whitespace between the tokens is hard to deal with. I will recommend removing whitespace before using
-    otherwise, it may lead a false positive result (Not a bug, but should be add in development progress.)
 - You once mentioned that, in order to make it simplify, string like
 ```html
 <person gender="female"></person>

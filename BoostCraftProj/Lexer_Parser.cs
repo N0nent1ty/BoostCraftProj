@@ -410,7 +410,8 @@
                 ch = this.lexer.Peek_One_Char();
                 int nRecord = 0;
                 //peek on char after <person attr="123"> `here`
-                if (Char.IsLetterOrDigit(ch))
+                this.lexer.Ignore_space();
+                if (!ch.Equals('<'))
                 {
                     //not parse chardata yet
                     if (bAlreadyParseCharData == false)
@@ -437,7 +438,7 @@
                 }               
                 else
                 {
-
+                    this.lexer.Ignore_space();
                     string strErrorMessage = String.Format("Unexpected character detected {0}, not a valid XML node", ch);
                     throw new ApplicationException(strErrorMessage);
 
