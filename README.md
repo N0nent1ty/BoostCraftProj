@@ -17,7 +17,7 @@
 <person gender="female"></person>
 ```
 Should be treated as an invalid one, I still hand out my diffcult-one version that able to deal with these attribute problem,
-<person gender="female"></person> can be recognized as valid one in this version.
+<person gender="female"></person> it can recognized such inputstring as a valid one in this version.
 
 
  - This program even able to point out which part of the XML node cause to error, for instance, the string like 
