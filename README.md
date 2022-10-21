@@ -1,4 +1,4 @@
-# BoostCraftProj
+\# BoostCraftProj
 ### A XML node validator written in C#
 ## Demonstration of the execution result 
 ![alt text](https://github.com/N0nent1ty/BoostCraftProj/blob/master/demo_imgs/result_demo1.PNG)
@@ -12,6 +12,9 @@
 ![alt text](https://github.com/N0nent1ty/BoostCraftProj/blob/master/demo_imgs/how_to_execute2.PNG)
 
 ## Feature
+
+- Note that, the whitespace between the tokens is hard to deal with. I will recommend removing whitespace before using
+    otherwise, it may lead a false positive result (Not a bug, but should be add in development progress.)
 - You once mentioned that, in order to make it simplify, string like
 ```html
 <person gender="female"></person>
@@ -28,14 +31,6 @@ It will show the message enable user to know how to correct them.
 ```sh
 Symmetry error detected: invalid should be valid
 ```
-## Compilation
-You can follow the link below to learn how to set up the ANTLR, a LL(K) parser generator,
-https://www.antlr.org/download.html
-Once the installation finish, use the following command to compile to .g4 grammar file into C# language.
-```sh
-antlr4 -Dlanguage=CSharp  -package AntrlXMLParser  -listener -visitor -o .\Generated XMLParser.g4 XMLLexer.g4 
-```
-Afterward, you can open the sln file with VisualStudio, and compile it.
-If you don't want to set-up the ANTLR is also fine, I remain the C# grammar files in the generated floder. 
 
+ - This version utilized the recursive descent approach to build a XML parser, no other dependencies in needed.
 
