@@ -100,6 +100,7 @@
         public bool Match_OPEN_TOKEN() {
             Ignore_space();
             char ch = Peek_One_Char();
+            int nRollbackpoint = nCurrentCharPosition;
             char chOpen = '<';
             //Console.WriteLine("ch is " + ch);
             //Console.WriteLine(chOpen.Equals(ch));
@@ -113,9 +114,10 @@
             }
             else {
                 //handle not match error
-                string strErrorMessage = String.Format("Expect the  OPEN token but a {0}, not a valid XML node", ch);
+                //string strErrorMessage = String.Format("Expect the  OPEN token but a {0}, not a valid XML node", ch);
                 //throw new ApplicationException(strErrorMessage);
-                Console.WriteLine(strErrorMessage);
+                this.nCurrentCharPosition = nRollbackpoint;
+                //Console.WriteLine(strErrorMessage);
                 return false;
             }
         }
@@ -318,9 +320,10 @@
         public bool Match_SLASH_TOKEN()
         {
             Ignore_space();
+            int nRollbackPoint = this.nCurrentCharPosition;
             char ch = Peek_One_Char();
             char chOpen = '/';
-            //Console.WriteLine("ch is " + ch);
+           // Console.WriteLine("ch is " + ch);
             //Console.WriteLine(chOpen.Equals(ch));
             if (chOpen.Equals(ch))
             {
@@ -333,9 +336,10 @@
             else
             {
                 //handle not match error
-                string strErrorMessage = String.Format("Expect the  SLASH token but a {0}, not a valid XML node", ch);
+                //string strErrorMessage = String.Format("Expect the  SLASH token but a {0}, not a valid XML node", ch);
                 //throw new ApplicationException(strErrorMessage);
-                Console.WriteLine(strErrorMessage);
+                this.nCurrentCharPosition = nRollbackPoint;
+                //Console.WriteLine(strErrorMessage);
                 return false;
             }
         }
@@ -407,46 +411,44 @@
                 this.lexer.Match_CLOSE_TOKEN();
                 this.lexer.Ignore_space();
                 this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
-                ch = this.lexer.Peek_One_Char();
                 int nRecord = 0;
                 //peek on char after <person attr="123"> `here`
                 this.lexer.Ignore_space();
+                ch = this.lexer.Peek_One_Char();
                 if (!ch.Equals('<'))
                 {
-                    //not parse chardata yet
-                    if (bAlreadyParseCharData == false)
-                    {
-                        CBaseTokenNode CharDataNode = lexer.Try_Match_CHARDATA_Token();
-                        if (CharDataNode != null)
-                        {
-                            bAlreadyParseCharData = true;
-                        }
-                    }
-                    else
-                    {
-                        //already parse chardata but char data appear, ex:<person>wsafa<data>asdasd
-                        string strErrorMessage = String.Format("Expect the </IDENTIFIER> or <IDENTIFIER> token but get a {0}, not a valid XML node", ch);
-                        throw new ApplicationException(strErrorMessage);
-                    }
+                     CBaseTokenNode CharDataNode = lexer.Try_Match_CHARDATA_Token();
+                    Console.WriteLine(CharDataNode.getText());
+                   
                 }
                 else if (ch.Equals('<') && (this.lexer.Peek_One_Char_at(this.lexer.Get_Current_Char_Position() + 1) != '/'))
                 {
                     //<without slash >
                     nRecord = this.lexer.Get_Current_Char_Position();
+                    
                     element_node.childNode = Element();
                     this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
                 }               
                 else
                 {
                     this.lexer.Ignore_space();
-                    string strErrorMessage = String.Format("Unexpected character detected {0}, not a valid XML node", ch);
-                    throw new ApplicationException(strErrorMessage);
+                    string strErrorMessage = String.Format(" Unexpected character detected {0}, not a valid XML node", ch);
+                    Console.WriteLine(strErrorMessage);
+                    throw new TryParseFailException();
 
                 }
+                //Console.WriteLine(this.lexer.Peek_One_Char());
+
                 this.lexer.Match_OPEN_TOKEN();
-                this.lexer.Match_SLASH_TOKEN();
+                if (!this.lexer.Match_SLASH_TOKEN()) {
+                    element_node.childNode = Element();
+                    this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
+                    this.lexer.Match_OPEN_TOKEN();
+                    this.lexer.Match_SLASH_TOKEN();
+                }
+
                 CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
-                string strSecondIdentifier = second_Identifier.getText();
+                string strSecondIdentifier = second_Identifier.getText(); 
                 element_node.strList_Identifiers.Add(strSecondIdentifier);
                 this.lexer.Match_CLOSE_TOKEN();
 
@@ -465,7 +467,7 @@
                 }
             }
             return element_node;
-        }
+         }
         public List<CBaseTokenNode> get_tokens() { return this.lexer.get_tokens(); }
     }
 }
