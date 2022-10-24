@@ -3,7 +3,7 @@ using System;
 using Lexer_and_parser;
 
 
-class CheckFileFormat
+class CCheckFileFormat
 {
 
 
@@ -30,15 +30,17 @@ class CheckFileFormat
             }
             Console.WriteLine(identifier);
         }
-        if (node.childNode != null) {
-            PrintAndCheckNode(node.childNode, ref bFlag);
+        if (node.ChildNodes != null && (node.ChildNodes.Any())) {
+            foreach (Lexer_and_parser.CElementNode ChildNode in node.ChildNodes) {
+                PrintAndCheckNode(ChildNode, ref bFlag);
+            }
         }
         return;
     }
 
 
 
-    static bool checkFileFormat(FileInfo file)
+    static bool CheckFileFormat(FileInfo file)
     {
         //If the input not even in XML node format, it simply raise a exeception 
 
@@ -88,7 +90,7 @@ class CheckFileFormat
         FileInfo[] files = di.GetFiles("*.txt");
         foreach (FileInfo file in files)
         {
-            checkFileFormat(file);
+            CheckFileFormat(file);
         }
     }
 }

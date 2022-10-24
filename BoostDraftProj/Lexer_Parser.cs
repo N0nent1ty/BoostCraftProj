@@ -45,11 +45,11 @@
 
         public List<string> strList_Identifiers = new List<string>();
         public List<string> strList_Properties = new List<string>();
-        public CElementNode childNode;
+        public List<CElementNode> ChildNodes;
 
         public CElementNode(TOKEN_TYPES n) : base(n)
         {
-
+            this.ChildNodes = new List<CElementNode>();
         }
 
 
@@ -358,10 +358,10 @@
             else
             {
                 //handle not match error
-                string strErrorMessage = String.Format("Expect the  SLASH token but a {0}, not a valid XML node", ch);
+                //string strErrorMessage = String.Format("Expect the  SLASH token but a {0}, not a valid XML node", ch);
                 //throw new ApplicationException(strErrorMessage);
                 this.nCurrentCharPosition = nRollbackPoint;
-                Console.WriteLine(strErrorMessage);
+                //Console.WriteLine(strErrorMessage);
                 return false;
             }
         }
@@ -410,12 +410,44 @@
     //================================================================
     class Parser
     {
-        private bool bAlreadyParseCharData = false;
+        
         private Lexer lexer;
+
+        public int nOpenNodeNumber;
+        public int nOpenNodeNumberP {
+            get
+            { return this.nOpenNodeNumber; }
+            set { 
+              this.nOpenNodeNumberP = value;
+            }
+        }
+
+        public int nCloseNodeNumber;
+
+
         public Parser(string strInput)
         {
             this.lexer = new Lexer(strInput);
         }
+
+        public CElementNode TryMatchSubNodeGrammar(CElementNode node) {
+            this.lexer.Match_OPEN_TOKEN();
+            if (!this.lexer.Match_SLASH_TOKEN())
+            {
+                node.ChildNodes.Add(Element());
+                this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
+                this.lexer.Match_OPEN_TOKEN();
+                this.lexer.Match_SLASH_TOKEN();
+            }
+            TryMatchSubNodeGrammar(node);
+            return node;
+
+        
+        }
+
+
+
+
 
         public CElementNode Element()
         {
@@ -450,7 +482,7 @@
                     //<without slash >
                     nRecord = this.lexer.Get_Current_Char_Position();
 
-                    element_node.childNode = Element();
+                    element_node.ChildNodes.Add(Element());
                     this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
                 }
                 else
@@ -462,15 +494,26 @@
 
                 }
                 //Console.WriteLine(this.lexer.Peek_One_Char());
+                
 
-                this.lexer.Match_OPEN_TOKEN();
+
+
+                 this.lexer.Match_OPEN_TOKEN();
                 if (!this.lexer.Match_SLASH_TOKEN())
                 {
-                    element_node.childNode = Element();
+
+                THERE_IS_ANOTHER_NODE:
+                    element_node.ChildNodes.Add(Element());
                     this.lexer.Set_Current_Char_Position(this.lexer.Get_Current_Char_Position() + 1);
                     this.lexer.Match_OPEN_TOKEN();
-                    this.lexer.Match_SLASH_TOKEN();
+                    if (!this.lexer.Match_SLASH_TOKEN()) {
+                        goto THERE_IS_ANOTHER_NODE;
+                    }
                 }
+
+
+                //this.TryMatchSubNodeGrammar(element_node);
+                 
 
                 CBaseTokenNode second_Identifier = this.lexer.Match_IDENTIFY_TOKEN();
                 string strSecondIdentifier = second_Identifier.getText();
@@ -479,7 +522,7 @@
 
 
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 if (ex.GetType().FullName == "TryParseFailException")
                 {
