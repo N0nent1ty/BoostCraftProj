@@ -1,4 +1,4 @@
-\# BoostCraftProj
+# BoostDraftProj
 ### A XML node validator written in C#
 ## Demonstration of the execution result 
 ![alt text](https://github.com/N0nent1ty/BoostCraftProj/blob/master/demo_imgs/result_demo1.PNG)
