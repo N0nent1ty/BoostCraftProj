@@ -504,7 +504,8 @@
 
                 
                 //after parsing a child node or char data, there must be another child node(BEGIN_ELEMENT) or TERMINATE_ELEMENT
-                //the difference between the BEGIN_ELEMENT and TERMIATE_ELEMENT is that string will begine with '<' or '</'
+                //the difference between the BEGIN_ELEMENT and TERMIATE_ELEMENT is that string begine with '<' or '</'
+                //Try match first two char and we can tell what type of token next
                 this.lexer.Match_OPEN_TOKEN();
                 if (!this.lexer.Match_SLASH_TOKEN())
                 {
