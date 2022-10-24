@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "KKX6OJt3gVt16Ij6xUf6mtPBJ8kG9bYLK4G0EDEzCNTIgyaeTAPBofDgtSEdtS2zbdn83BiC5LlObam1pqxnvA==",
+  "success": true,
+  "projectFilePath": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostDraftProj\\BoostDraftProj.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\shengchikuo\\.nuget\\packages\\antlr4.runtime.standard\\4.11.1\\antlr4.runtime.standard.4.11.1.nupkg.sha512"
+  ],
+  "logs": []
+}

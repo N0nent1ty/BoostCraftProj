@@ -43,11 +43,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostCraftProj\\BoostCraftProj.csproj",
-      "projectName": "BoostCraftProj",
-      "projectPath": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostCraftProj\\BoostCraftProj.csproj",
+      "projectUniqueName": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostDraftProj\\BoostDraftProj.csproj",
+      "projectName": "BoostDraftProj",
+      "projectPath": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostDraftProj\\BoostDraftProj.csproj",
       "packagesPath": "C:\\Users\\shengchikuo\\.nuget\\packages\\",
-      "outputPath": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostCraftProj\\obj\\",
+      "outputPath": "E:\\experiments\\vs_projects\\BoostCraftProj\\BoostDraftProj\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

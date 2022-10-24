@@ -84,7 +84,7 @@ class CheckFileFormat
         string Folder_path = Path.Combine(Directory.GetCurrentDirectory(), "test_inputs");
 
         DirectoryInfo di = new DirectoryInfo(Folder_path);
-        //Will execute all text file under the "test_inputs" folder
+        //Will test all text file under the "test_inputs" folder
         FileInfo[] files = di.GetFiles("*.txt");
         foreach (FileInfo file in files)
         {
