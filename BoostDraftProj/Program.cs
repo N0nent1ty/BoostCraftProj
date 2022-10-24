@@ -15,8 +15,6 @@ class CCheckFileFormat
         return isAllEqual;
     }
 
-    static bool bCheckValidFlag=true;
-
 
 
     static void PrintAndCheckNode(CElementNode node, ref bool bFlag) {
