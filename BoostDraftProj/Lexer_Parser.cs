@@ -476,14 +476,14 @@
                 char ch = this.lexer.PeekOneChar();
 
 
-                //If the next char after the  "greater than sign" is not the "less than sign", it must be the chardata
+                //If the next char after the "greater than sign" is not the "less than sign", it must be the chardata
                 if (!ch.Equals('<'))
                 {
                     CBaseTokenNode CharDataNode = lexer.TryMatch_CHARDATA_TOKEN();
                     Console.WriteLine(CharDataNode.getText());
 
                 }
-                //It must be the BEGIN_ELEMENT the next two char match the constrain below, and a BEGIN_ELEMENT means there will be a child node
+                //It must be the BEGIN_ELEMENT if the next two char match the constrain below, and a BEGIN_ELEMENT means there will be a child node
                 else if (ch.Equals('<') && (this.lexer.PeekOneCharAt(this.lexer.GetCurrentCharPosition() + 1) != '/'))
                 {
                     //<without slash >
@@ -492,7 +492,7 @@
                     element_node.ChildNodes.Add(Element());
                     this.lexer.SetCurrentCharPosition(this.lexer.GetCurrentCharPosition() + 1);
                 }
-                //Read an onexpect the charater
+                //Read an unexpected charater
                 else
                 {
                     this.lexer.IgnoreSpace();
